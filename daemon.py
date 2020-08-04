@@ -25,21 +25,21 @@ class Daemon:
             # if pid > 0, parent process
             if pid > 0: 
                 sys.exit(0)
-        except OSError, e:
+        except OSError as e:
                 sys.stderr.write(f"fork #1 failed: {e.errno, e.strerror} \n")
                 sys.exit(1)
 
-            # decouple parent process
-            os.chdir("/")
-            os.setsid()
-            os.umask(0)
+        # decouple parent process
+        os.chdir("/")
+        os.setsid()
+        os.umask(0)
 
             # do second fork
         try:
             pid = os.fork
             if pid > 0:
                 sys.exit(0)
-        except OSError, e:
+        except OSError as e:
             sys.stderr.write(f"fork #2 failed: {e.errno, e.strerror}")
             sys.exit(1)
 
@@ -97,13 +97,12 @@ class Daemon:
             message = "pidfile %s does not exist. Daemon not running? \n"
             sys.stderr.write(message % self.pidfile)
             return 
-        
         # Try killing the daemon process	
 		try:
 			while 1:
 				os.kill(pid, SIGTERM)
 				time.sleep(0.1)
-		except OSError, err:
+		except OSError as err:
 			err = str(err)
 			if err.find("No such process") > 0:
 				if os.path.exists(self.pidfile):
