@@ -1,4 +1,4 @@
-
+import sys
 from _ctrl_led import CtrlLed
 from daemon import Daemon
 
