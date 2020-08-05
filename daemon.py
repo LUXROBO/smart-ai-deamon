@@ -36,7 +36,7 @@ class Daemon:
 
             # do second fork
         try:
-            pid = os.fork
+            pid = os.fork()
             if pid > 0:
                 sys.exit(0)
         except OSError as e:
@@ -48,7 +48,7 @@ class Daemon:
         sys.stderr.flush()
         si = open(self.stdin, 'r')
         so = open(self.stdout, 'a+')
-        se = open(self.stderr, 'a+', 0)
+        se = open(self.stderr, 'a+')
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
@@ -56,7 +56,7 @@ class Daemon:
         # write pidfile
         atexit.register(self.delpid)
         pid = str(os.getpid())
-        file(self.pidfile,'w+').write("%s\n" % pid)
+        open(self.pidfile,'w+').write("%s\n" % pid)
 
     def delpid(self):
         os.remove(self.pidfile)
@@ -66,7 +66,7 @@ class Daemon:
         Start the daemon
         """
         try:
-            pf = file(self.pidfile,'r')
+            pf = open(self.pidfile,'r')
             pid = int(pf.read().strip())
             pf.close()
         except IOError:
@@ -87,7 +87,7 @@ class Daemon:
         """
 
         try:
-            pf = file(self.pidfile, 'r')
+            pf = open(self.pidfile, 'r')
             pid = int(pf.read().strip())
             pf.close()
         except: 

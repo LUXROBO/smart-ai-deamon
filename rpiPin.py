@@ -4,12 +4,16 @@ from daemon import Daemon
 
 class RPIDaemon(Daemon):
     def run(self):
-        
         try:
+
             CtrlLed.run()
+
         except Exception as err:
 
             print("No fan, led connection")
+
+        except KeyboardInterrupt:
+            
 
 if __name__ == "__main__":
     daemon = RPIDaemon('/var/run/rpidaemon.pid')

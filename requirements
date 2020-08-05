@@ -1,2 +1,3 @@
 board
 adafruit-circuitpython-neopixel
+rpi-ws281x
