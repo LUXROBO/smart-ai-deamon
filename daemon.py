@@ -1,6 +1,9 @@
 import os
 import sys
 import time
+import atexit
+
+from signal import SIGTERM
 
 class Daemon:
     """[summary]
@@ -14,17 +17,19 @@ class Daemon:
         self.stderr = stderr
         self.pidfile = pidfile
     
-    def deamonize(self):
+    def daemonize(self):
         """
         Do Unix double fork magic: fork a second child and exit immediately to prevent zombie
         """
         try:
             # fork child process
             pid = os.fork()
-            
+            print(f"Fork #1 {pid}")
+
             # if pid > 0, parent process
             if pid > 0: 
                 sys.exit(0)
+
         except OSError as e:
             sys.stderr.write(f"fork #1 failed: {e.errno, e.strerror} \n")
             sys.exit(1)
@@ -37,8 +42,11 @@ class Daemon:
             # do second fork
         try:
             pid = os.fork()
+            print(f"Fork #2 {pid}")
+
             if pid > 0:
                 sys.exit(0)
+
         except OSError as e:
             sys.stderr.write(f"fork #2 failed: {e.errno, e.strerror}")
             sys.exit(1)
@@ -52,11 +60,14 @@ class Daemon:
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
-    
+
+        print("write pid")
         # write pidfile
         atexit.register(self.delpid)
         pid = str(os.getpid())
-        open(self.pidfile,'w+').write("%s\n" % pid)
+        with open(self.pidfile, 'w+') as f:
+            f.write(pid)
+        print("write pid")
 
     def delpid(self):
         os.remove(self.pidfile)
@@ -85,7 +96,6 @@ class Daemon:
         """
         Stop the daemon
         """
-
         try:
             pf = open(self.pidfile, 'r')
             pid = int(pf.read().strip())
@@ -100,6 +110,7 @@ class Daemon:
         # Try killing the daemon process	
         try:
             while 1:
+                self.initialize()
                 os.kill(pid, SIGTERM)
                 time.sleep(0.1)
         except OSError as err:
@@ -110,6 +121,11 @@ class Daemon:
             else:
                 print(str(err))
                 sys.exit(1)
+    
+    def initialize(self):
+        """
+        You should override this method.
+        """
 
     def restart(self):
         """

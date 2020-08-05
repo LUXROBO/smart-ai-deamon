@@ -12,12 +12,12 @@ class CtrlLed:
         GPIO.setup(12, GPIO.OUT)
         GPIO.output(12, True)        
 
-        self.pixels = neopixel.NeoPixel(borad.D12, 1)
+        self.pixels = neopixel.NeoPixel(board.D12, 1)
 
     def run(self):
         while 1:
             try:
-                pixels[0] = (0, 255, 0)
+                self.pixels[0] = (0, 255, 0)
                 print("All system boot up")
 
             except OSError as e:

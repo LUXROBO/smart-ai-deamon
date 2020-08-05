@@ -5,16 +5,15 @@ from daemon import Daemon
 class RPIDaemon(Daemon):
     def run(self):
         try:
-
-            CtrlLed.run()
+            self.led = CtrlLed()
+            self.led.run()
 
         except Exception as err:
-
             print("No fan, led connection")
 
-        except KeyboardInterrupt:
+    def initialize(self):
+        self.led.exit()
             
-
 if __name__ == "__main__":
     daemon = RPIDaemon('/var/run/rpidaemon.pid')
     if len(sys.argv) == 2:
