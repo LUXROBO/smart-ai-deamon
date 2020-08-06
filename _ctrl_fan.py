@@ -6,6 +6,18 @@ import RPi.GPIO as GPIO
 from concurrent.futures import ThreadPoolExecutor
 
 class CtrlFan:
+    _instance = None
+
+    @classmethod
+    def _getInstance(cls):
+        return cls._instance
+
+    @classmethod
+    def instance(cls, *args, **kargs):
+        cls._instance = cls(*args, **kargs)
+        cls._instance = _getInstance
+        return cls._instance
+
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(13, GPIO.OUT)
