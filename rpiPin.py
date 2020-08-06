@@ -5,7 +5,6 @@ from daemon import Daemon
 class RPIDaemon(Daemon):
     def run(self):
         try:
-            self.led = CtrlLed()
             self.led.run()
 
         except Exception as err:

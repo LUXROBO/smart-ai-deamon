@@ -113,6 +113,7 @@ class Daemon:
                 self.initialize()
                 os.kill(pid, SIGTERM)
                 time.sleep(0.1)
+
         except OSError as err:
             err = str(err)
             if err.find("No such process") > 0:

@@ -30,8 +30,6 @@ class CtrlLed:
         
     def exit(self):
         self.pixels[0] = (0, 0, 0)
-        print("Terminate the program")
-        sys.exit(0)
         
 if __name__ == "__main__":
     led = CtrlLed()
