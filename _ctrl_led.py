@@ -43,7 +43,7 @@ class CtrlLed:
                     self.pixels[0] = (0, 255, 0)
                 else:
                     self.pixels[0] = (255, 0, 0)
-        
+                
         except KeyboardInterrupt:
             self.exit()
             sys.exit(0)
@@ -59,8 +59,8 @@ class CtrlLed:
             self._jupyter_flag = False
 
     def exit(self):
+        self._jupyter_flag = False
         self.pixels[0] = (0, 0, 0)
-        print("stop control")
 
 if __name__ == "__main__":
     led = CtrlLed()
