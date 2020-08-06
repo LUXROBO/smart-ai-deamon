@@ -1,5 +1,6 @@
 import sys
 from _ctrl_led import CtrlLed
+from _ctrl_fan import CtrlFan
 from daemon import Daemon
 
 class RPIDaemon(Daemon):
@@ -7,14 +8,18 @@ class RPIDaemon(Daemon):
         try:
             
             led = CtrlLed()
+            fan = CtrlFan()
             led.run()
+            fan.run()
             
         except Exception as err:
             print("No fan, led connection")
 
     def initialize(self):
         led = CtrlLed()
+        fan = CtrlFan()
         led.exit()
+        fan.exit()
             
 if __name__ == "__main__":
     daemon = RPIDaemon('/var/run/rpidaemon.pid')

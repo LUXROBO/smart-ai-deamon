@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 
@@ -22,11 +23,17 @@ class CtrlFan:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(13, GPIO.OUT)
 
+        self._temp_flag = False
+
+        self._temp_pool = ThreadPoolExecutor(max_workers=1)
+
     def run(self):
         try:
             while 1:
-                GPIO.output(13, True)
-                time.sleep(0.01)
+                self._temp_pool.submit(self._get_temp)
+                if self._temp_flag:
+                    GPIO.output(13, True)
+                    time.sleep(0.01)
 
         except KeyboardInterrupt:
             GPIO.cleanup()
@@ -34,6 +41,21 @@ class CtrlFan:
                 
         finally:
             GPIO.cleanup()
+        
+    def _get_temp(self):
+        temp = os.popen("vcgencmd measure_temp").readline()
+        temp = temp.replace("temp=","")
+        token = temp.split("'")
+        temp = token[0]
+        temp = float(temp)
+        
+        if 50 < temp:
+            self._temp_flag = True
+        else:
+            self._temp_flag = False
+    
+    def exit(self):
+        self._temp_flag = False
 
 if __name__ == "__main__":
     fan = CtrlFan()
