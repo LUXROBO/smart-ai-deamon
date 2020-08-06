@@ -1,10 +1,13 @@
 import sys
 import time
+import socket
 
 import board
 import neopixel
 
 import RPi.GPIO as GPIO
+
+from concurrent.futures import ThreadPoolExecutor
 
 class CtrlLed:
     _instance = None
@@ -26,20 +29,35 @@ class CtrlLed:
 
         self.pixels = neopixel.NeoPixel(board.D12, 1)
 
+        self._jupyter_flag = False
+        self._unstable_flag = False
+
+        self.flag_pool = ThreadPoolExecutor(max_workers=1)
+
     def run(self):
-        while 1:
-            try:
-                self.pixels[0] = (0, 255, 0)
-                print("All system boot up")
+        try:
+            while 1:
+                self.flag_pool.submit(self.__monitoring_kernel)
 
-            except OSError as e:
-                print("There is no shield")
-
-            except KeyboardInterrupt:
-                self.pixels[0] = (0, 0, 0)
-                print("Terminate the program")
-                sys.exit(0)
+                if self._jupyter_flag:
+                    self.pixels[0] = (0, 255, 0)
+                
+                else:
+                    self.pixels[0] = (255, 0, 0)
         
+        except KeyboardInterrupt:
+            self.exit()
+            sys.exit(0)
+        
+    def __monitoring_kernel(self):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        res = sock.connect_ex(('127.0.0.1', 8888))
+        if res == 0: 
+            self._jupyter_flag = True
+
+        else:
+            self._jupyter_flag = False
+
     def exit(self):
         self.pixels[0] = (0, 0, 0)
         

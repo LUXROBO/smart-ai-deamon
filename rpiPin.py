@@ -5,6 +5,7 @@ from daemon import Daemon
 class RPIDaemon(Daemon):
     def run(self):
         try:
+            
             led = CtrlLed()
             led.run()
 
