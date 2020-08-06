@@ -41,7 +41,6 @@ class CtrlLed:
 
                 if self._jupyter_flag:
                     self.pixels[0] = (0, 255, 0)
-                
                 else:
                     self.pixels[0] = (255, 0, 0)
         
@@ -52,6 +51,7 @@ class CtrlLed:
     def __monitoring_kernel(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         res = sock.connect_ex(('127.0.0.1', 8888))
+
         if res == 0: 
             self._jupyter_flag = True
 
@@ -60,7 +60,8 @@ class CtrlLed:
 
     def exit(self):
         self.pixels[0] = (0, 0, 0)
-        
+        print("stop control")
+
 if __name__ == "__main__":
     led = CtrlLed()
     led.run()

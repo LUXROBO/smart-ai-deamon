@@ -8,7 +8,6 @@ class RPIDaemon(Daemon):
             
             led = CtrlLed()
             led.run()
-
         except Exception as err:
             print("No fan, led connection")
 
