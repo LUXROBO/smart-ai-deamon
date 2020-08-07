@@ -56,6 +56,7 @@ class CtrlFan:
     
     def exit(self):
         self._temp_flag = False
+        GPIO.output(13, False)
 
 if __name__ == "__main__":
     fan = CtrlFan()
