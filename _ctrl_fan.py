@@ -49,7 +49,7 @@ class CtrlFan:
         temp = token[0]
         temp = float(temp)
         
-        if 50 < temp:
+        if 70 < temp:
             self._temp_flag = True
         else:
             self._temp_flag = False
