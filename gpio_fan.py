@@ -7,18 +7,18 @@ class RPIDaemon(Daemon):
     def run(self):
         try:
             
-            led = CtrlLed()
-            led.run()
+            fan = CtrlFan()
+            fan.run()
             
         except Exception as err:
             print("No fan, led connection")
 
     def initialize(self):
-        led = CtrlLed()
-        led.exit()
+        fan = CtrlFan()
+        fan.exit()
             
 if __name__ == "__main__":
-    daemon = RPIDaemon('/var/run/rpidaemon.pid')
+    daemon = RPIDaemon('/var/run/gpio_fan.pid')
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
             daemon.start()

@@ -1,0 +1,14 @@
+[Unit]
+Description=Control gpio led control service
+After=multi-user.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/python3 /opt/gpio_led/main.py --pid /var/run/gpio_led.pid --log /var/log/gpio_led/gpio_led.log
+Restart=always
+PIDFile=/var/run/gpio_led.pid
+WorkingDirectory=/opt/gpio_led
+ExecStop=/bin/kill $MAINPID
+
+[Install]
+WantedBy=multi-user.target
