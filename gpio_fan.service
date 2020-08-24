@@ -4,10 +4,10 @@ After=multi-user.target
 
 [Service]
 Type=forking
-ExecStart=/usr/bin/python3 /opt/gpio_fan/main.py --pid /var/run/gpio_fan.pid --log /var/log/gpio_fan/gpio_fan.log
+ExecStart=/usr/bin/python3 /usr/src/gpio_fan/main.py --pid /var/run/gpio_fan.pid 
 Restart=always
 PIDFile=/var/run/gpio_fan.pid
-WorkingDirectory=/opt/gpio_fan
+WorkingDirectory=/usr/src/gpio_fan
 ExecStop=/bin/kill $MAINPID
 
 [Install]
