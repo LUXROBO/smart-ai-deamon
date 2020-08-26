@@ -19,7 +19,7 @@ def button_callback(channel):
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(6, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-GPIO.add_event_detect(6, GPIO.RISING, callback=button_callback)
+GPIO.add_event_detect(6, GPIO.FALLING, callback=button_callback)
 
 message = input("Press enter to quit\n\n")
 
