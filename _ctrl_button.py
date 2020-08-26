@@ -7,7 +7,7 @@ run_state_flag = False
 
 def button_callback(channel):
     if run_state_flag:
-        cmd = subprocess.run(["sudo", "python3", "/home/pi/workspace/run.py"])
+        cmd = subprocess.run(["sudo", "/usr/bin/python3", "/home/pi/workspace/run.py"])
 
         pro = subprocess.Popen()
 
