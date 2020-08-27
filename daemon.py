@@ -51,7 +51,6 @@ class Daemon:
             sys.stderr.write(f"fork #2 failed: {e.errno, e.strerror}")
             sys.exit(1)
 
-        redirect standard file descriptors 
         sys.stdout.flush()
         sys.stderr.flush()
         si = open(self.stdin, 'r')
