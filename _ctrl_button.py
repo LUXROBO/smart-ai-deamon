@@ -5,7 +5,7 @@ import subprocess
 
 import RPi.GPIO as GPIO
 
-class CtrlFan:
+class CtrlButton:
     _instance = None
     
     @classmethod
