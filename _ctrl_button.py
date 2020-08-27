@@ -31,8 +31,8 @@ class CtrlButton:
                 print("timeout")
             else:
                 print("edge detected")
-                if run_flag:
+                if self.run_flag:
                     pass
                 else:
                     cmd = subprocess.check_output(["sudo", "/usr/bin/python3", "/home/pi/workspace/run.py"])
-                    run_flag = False
+                    self.run_flag = False
