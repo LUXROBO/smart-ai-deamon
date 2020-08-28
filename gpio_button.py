@@ -15,7 +15,6 @@ class RPIDaemon(Daemon):
 
     def initialize(self):
         button = CtrlButton()
-        print(button)
         button.exit()
 
 if __name__ == "__main__":

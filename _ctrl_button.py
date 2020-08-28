@@ -5,6 +5,8 @@ import subprocess
 
 import RPi.GPIO as GPIO
 
+from concurrent.futures import ThreadPoolExecutor
+
 class CtrlButton:
     _instance = None
     
@@ -24,15 +26,31 @@ class CtrlButton:
 
         self.run_flag = False
 
+        self.flag_pool = ThreadPoolExecutor(max_workers=1)
+
     def run(self):
-        while True:
-            pin = GPIO.wait_for_edge(6, GPIO.FALLING, timeout=1000)
-            if pin is None:
-                print("timeout")
-            else:
-                print("edge detected")
-                if self.run_flag:
-                    pass
-                else:
-                    cmd = subprocess.check_output(["sudo", "/usr/bin/python3", "/home/pi/workspace/run.py"])
-                    self.run_flag = False
+        try:
+            while True:
+                self.flag_pool.submit(self._run_file)
+        except ValueError:
+            print("wrong")
+
+    def _run_file(self):
+         pin = GPIO.wait_for_edge(6, GPIO.FALLING, timeout=1000)
+         if pin is None:
+             print("timeout")
+         else:
+             print("edge detected")
+             if self.run_flag:
+                 print('process kill')
+                 os.kill(self.p.pid, signal.SIGTERM)
+                 self.run_flag = False
+             else:
+                 cmd = ["sudo python3 /home/pi/workspace/run.py"]
+                 self.p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+                 print(self.p.pid)
+                 self.run_flag = True
+                 time.sleep(1)
+
+    def exit(self):
+        self.run_flag = False
