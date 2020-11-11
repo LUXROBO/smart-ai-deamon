@@ -7,7 +7,7 @@ import sounddevice as sd
 import soundfile as sf
 
 def play_beep():
-    data, fs = sf.read('/home/pi/rpi-daemon-py/sound/beep.wav', dtype="float32")
+    data, fs = sf.read('/usr/src/rpi-daemon-py/sound/beep.wav', dtype="float32")
     sd.play(data, fs)
     sd.wait()
 
