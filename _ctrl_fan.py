@@ -34,6 +34,8 @@ class CtrlFan:
                 #self._temp_pool.submit(self._get_temp)
                 if self._temp_flag:
                     GPIO.output(13, True)
+                    time.sleep(0.04)
+                    GPIO.output(13, False)
                     time.sleep(0.01)
 
         except KeyboardInterrupt:
